@@ -538,7 +538,9 @@ async function generateSlideContent(
   const prompts = buildPrompt(PROMPT_IDS.SLIDE_CONTENT, {
     title: outline.title,
     description: outline.description,
-    keyPoints: (outline.keyPoints || []).map((p, i) => `${i + 1}. ${p}`).join('\n'),
+    keyPoints: (Array.isArray(outline.keyPoints) ? outline.keyPoints : [])
+      .map((p, i) => `${i + 1}. ${p}`)
+      .join('\n'),
     elements: '（根据要点自动生成）',
     assignedImages: assignedImagesText,
     canvas_width: canvasWidth,
@@ -642,7 +644,9 @@ async function generateQuizContent(
   const prompts = buildPrompt(PROMPT_IDS.QUIZ_CONTENT, {
     title: outline.title,
     description: outline.description,
-    keyPoints: (outline.keyPoints || []).map((p, i) => `${i + 1}. ${p}`).join('\n'),
+    keyPoints: (Array.isArray(outline.keyPoints) ? outline.keyPoints : [])
+      .map((p, i) => `${i + 1}. ${p}`)
+      .join('\n'),
     questionCount: quizConfig.questionCount,
     difficulty: quizConfig.difficulty,
     questionTypes: quizConfig.questionTypes.join(', '),
@@ -746,7 +750,9 @@ async function generateInteractiveContent(
       subject: config.subject || '',
       conceptName: config.conceptName,
       conceptOverview: config.conceptOverview,
-      keyPoints: (outline.keyPoints || []).map((p, i) => `${i + 1}. ${p}`).join('\n'),
+      keyPoints: (Array.isArray(outline.keyPoints) ? outline.keyPoints : [])
+        .map((p, i) => `${i + 1}. ${p}`)
+        .join('\n'),
       designIdea: config.designIdea,
     });
 
@@ -789,7 +795,9 @@ async function generateInteractiveContent(
     conceptName: config.conceptName,
     subject: config.subject || '',
     conceptOverview: config.conceptOverview,
-    keyPoints: (outline.keyPoints || []).map((p, i) => `${i + 1}. ${p}`).join('\n'),
+    keyPoints: (Array.isArray(outline.keyPoints) ? outline.keyPoints : [])
+      .map((p, i) => `${i + 1}. ${p}`)
+      .join('\n'),
     scientificConstraints,
     designIdea: config.designIdea,
     language,
@@ -925,7 +933,9 @@ export async function generateSceneActions(
 
     const prompts = buildPrompt(PROMPT_IDS.SLIDE_ACTIONS, {
       title: outline.title,
-      keyPoints: (outline.keyPoints || []).map((p, i) => `${i + 1}. ${p}`).join('\n'),
+      keyPoints: (Array.isArray(outline.keyPoints) ? outline.keyPoints : [])
+        .map((p, i) => `${i + 1}. ${p}`)
+        .join('\n'),
       description: outline.description,
       elements: elementsText,
       courseContext: buildCourseContext(ctx),
@@ -954,7 +964,9 @@ export async function generateSceneActions(
 
     const prompts = buildPrompt(PROMPT_IDS.QUIZ_ACTIONS, {
       title: outline.title,
-      keyPoints: (outline.keyPoints || []).map((p, i) => `${i + 1}. ${p}`).join('\n'),
+      keyPoints: (Array.isArray(outline.keyPoints) ? outline.keyPoints : [])
+        .map((p, i) => `${i + 1}. ${p}`)
+        .join('\n'),
       description: outline.description,
       questions: questionsText,
       courseContext: buildCourseContext(ctx),
@@ -980,7 +992,9 @@ export async function generateSceneActions(
     const agentsText = formatAgentsForPrompt(agents);
     const prompts = buildPrompt(PROMPT_IDS.INTERACTIVE_ACTIONS, {
       title: outline.title,
-      keyPoints: (outline.keyPoints || []).map((p, i) => `${i + 1}. ${p}`).join('\n'),
+      keyPoints: (Array.isArray(outline.keyPoints) ? outline.keyPoints : [])
+        .map((p, i) => `${i + 1}. ${p}`)
+        .join('\n'),
       description: outline.description,
       conceptName: config?.conceptName || outline.title,
       designIdea: config?.designIdea || '',
@@ -1007,7 +1021,9 @@ export async function generateSceneActions(
     const agentsText = formatAgentsForPrompt(agents);
     const prompts = buildPrompt(PROMPT_IDS.PBL_ACTIONS, {
       title: outline.title,
-      keyPoints: (outline.keyPoints || []).map((p, i) => `${i + 1}. ${p}`).join('\n'),
+      keyPoints: (Array.isArray(outline.keyPoints) ? outline.keyPoints : [])
+        .map((p, i) => `${i + 1}. ${p}`)
+        .join('\n'),
       description: outline.description,
       projectTopic: pblConfig?.projectTopic || outline.title,
       projectDescription: pblConfig?.projectDescription || outline.description,

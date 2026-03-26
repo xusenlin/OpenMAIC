@@ -1,3 +1,4 @@
+import { after } from 'next/server';
 import { nanoid } from 'nanoid';
 import { callLLM } from '@/lib/ai/llm';
 import { createStageAPI } from '@/lib/api/stage-api';
@@ -40,6 +41,7 @@ export interface GenerateClassroomInput {
   enableVideoGeneration?: boolean;
   enableTTS?: boolean;
   agentMode?: 'default' | 'generate';
+  videoMode?: boolean;
 }
 
 export type ClassroomGenerationStep =
@@ -355,8 +357,14 @@ export async function generateClassroom(
     });
   }
 
-  const scenes = store.getState().scenes;
+  let scenes = store.getState().scenes;
   log.info(`Pipeline complete: ${scenes.length} scenes generated`);
+
+  if (input.videoMode) {
+    const originalCount = scenes.length;
+    scenes = scenes.filter((s) => s.type === 'slide');
+    log.info(`Video mode: filtered ${originalCount} scenes to ${scenes.length} slide-only scenes`);
+  }
 
   if (scenes.length === 0) {
     throw new Error('No scenes were generated');
@@ -417,6 +425,15 @@ export async function generateClassroom(
   );
 
   log.info(`Classroom persisted: ${persisted.id}, URL: ${persisted.url}`);
+
+  if (input.videoMode) {
+    after(() => {
+      const baseUrl = options.baseUrl || 'http://localhost:3000';
+      fetch(`${baseUrl}/api/export-video/${stageId}`, { method: 'POST' }).catch((err) => {
+        log.error(`Video export failed for classroom ${stageId}:`, err);
+      });
+    });
+  }
 
   await options.onProgress?.({
     step: 'completed',

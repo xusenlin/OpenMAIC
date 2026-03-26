@@ -24,6 +24,7 @@ export async function POST(req: NextRequest) {
         : {}),
       ...(rawBody.enableTTS != null ? { enableTTS: rawBody.enableTTS } : {}),
       ...(rawBody.agentMode ? { agentMode: rawBody.agentMode } : {}),
+      ...(rawBody.videoMode != null ? { videoMode: rawBody.videoMode } : {}),
     };
     const { requirement } = body;
 
